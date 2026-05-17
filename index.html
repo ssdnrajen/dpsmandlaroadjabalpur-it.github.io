@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DPS Jabalpur — Digital Infrastructure Register</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f4fa;min-height:100vh}
+:root{--navy:#0d2e5c;--navy2:#1a4a8a;--accent:#e8a020;--light:#eaf1fb;--white:#fff;--gray:#f4f7fb;--border:#dde3ee;--text:#2c2c2a;--muted:#6b7280}
+
+/* HEADER */
+.app-header{background:var(--navy);color:#fff;padding:0 24px;display:flex;align-items:center;gap:14px;height:60px;box-shadow:0 2px 8px rgba(0,0,0,.18);position:sticky;top:0;z-index:50}
+.logo{width:38px;height:38px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff;flex-shrink:0}
+.app-header h1{font-size:16px;font-weight:600;letter-spacing:.2px}
+.app-header small{font-size:11px;opacity:.6;display:block}
+
+/* NAV TABS */
+.tabs{display:flex;background:#fff;border-bottom:2px solid var(--border);padding:0 16px;overflow-x:auto;gap:2px;position:sticky;top:60px;z-index:40;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.tab{padding:12px 18px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:none;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap;display:flex;align-items:center;gap:6px;transition:.2s}
+.tab:hover{color:var(--navy2);background:#f4f8ff}
+.tab.active{color:var(--navy2);border-bottom-color:var(--navy2);background:#fff}
+.tab-icon{font-size:16px}
+
+/* LAYOUT */
+.content{max-width:1200px;margin:0 auto;padding:20px 16px}
+.section-card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;border:1px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,.05)}
+
+/* TOOLBAR */
+.toolbar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.toolbar select,.toolbar input[type=text]{font-size:13px;padding:7px 12px;border:1px solid var(--border);border-radius:8px;background:#fff;color:var(--text);height:34px;outline:none}
+.toolbar select:focus,.toolbar input:focus{border-color:var(--navy2)}
+.btn{padding:7px 14px;font-size:13px;border:1px solid var(--border);border-radius:8px;cursor:pointer;background:#fff;color:var(--text);display:inline-flex;align-items:center;gap:5px;height:34px;white-space:nowrap;transition:.15s;font-family:inherit}
+.btn:hover{background:#f4f8ff;border-color:var(--navy2);color:var(--navy2)}
+.btn-primary{background:var(--navy);color:#fff;border-color:var(--navy)}
+.btn-primary:hover{background:var(--navy2);color:#fff;border-color:var(--navy2)}
+.btn-sm{padding:3px 9px;font-size:12px;height:26px;border-radius:6px}
+.btn-danger{border-color:#fca5a5;color:#b91c1c}
+.btn-danger:hover{background:#fef2f2;border-color:#b91c1c}
+
+/* TABLES */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:10px}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:600px}
+thead th{background:var(--navy);color:#fff;padding:10px 12px;font-weight:500;text-align:left;font-size:12px;white-space:nowrap}
+thead th:first-child{border-radius:0}
+tbody tr:nth-child(even){background:#f8faff}
+tbody tr:hover{background:#edf2ff}
+td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+
+/* BADGES */
+.badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600}
+.b-green{background:#dcfce7;color:#166534}
+.b-gray{background:#f3f4f6;color:#4b5563}
+.b-amber{background:#fef3c7;color:#92400e}
+.b-blue{background:#dbeafe;color:#1e40af}
+.b-red{background:#fee2e2;color:#991b1b}
+
+/* STATS */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px}
+.stat-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;transition:.2s}
+.stat-card:hover{border-color:var(--navy2);box-shadow:0 2px 8px rgba(26,74,138,.1)}
+.stat-num{font-size:28px;font-weight:700;color:var(--navy2)}
+.stat-lbl{font-size:12px;color:var(--muted);margin-top:3px}
+.stat-icon{font-size:20px;margin-bottom:4px}
+
+/* FLOOR GROUP */
+.floor-hdr{background:var(--navy2);color:#fff;padding:8px 14px;font-size:12px;font-weight:600;border-radius:8px;margin:14px 0 6px;display:flex;align-items:center;gap:6px}
+
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center;padding:16px}
+.modal-bg.open{display:flex}
+.modal{background:#fff;border-radius:14px;padding:24px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.18)}
+.modal h3{font-size:17px;font-weight:600;margin-bottom:18px;color:var(--navy);border-bottom:2px solid var(--light);padding-bottom:10px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ff{display:flex;flex-direction:column;gap:4px}
+.ff.full{grid-column:1/-1}
+.ff label{font-size:12px;color:var(--muted);font-weight:500}
+.ff input,.ff select,.ff textarea{font-size:13px;padding:7px 10px;border:1px solid var(--border);border-radius:8px;background:#fff;color:var(--text);outline:none;font-family:inherit;transition:.15s}
+.ff input:focus,.ff select:focus{border-color:var(--navy2);box-shadow:0 0 0 3px rgba(26,74,138,.08)}
+.modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:20px;padding-top:14px;border-top:1px solid var(--border)}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:14px}
+.empty-icon{font-size:36px;margin-bottom:8px}
+
+/* INFO BOX */
+.info-box{background:var(--light);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--navy2);margin-top:12px;border-left:3px solid var(--navy2)}
+
+/* RESPONSIVE */
+@media(max-width:600px){.form-grid{grid-template-columns:1fr}.stat-grid{grid-template-columns:1fr 1fr}.content{padding:12px 10px}}
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <div class="logo">DPS</div>
+  <div>
+    <h1>Digital Infrastructure Register</h1>
+    <small>Delhi Public School, Jabalpur — IT Management System</small>
+  </div>
+</div>
+
+<div class="tabs" id="tabs">
+  <button class="tab active" onclick="setTab('overview',this)"><span class="tab-icon">🏠</span> Overview</button>
+  <button class="tab" onclick="setTab('cctv',this)"><span class="tab-icon">📷</span> Surveillance</button>
+  <button class="tab" onclick="setTab('smart',this)"><span class="tab-icon">🖥️</span> Smart Class</button>
+  <button class="tab" onclick="setTab('labs',this)"><span class="tab-icon">💻</span> Labs</button>
+  <button class="tab" onclick="setTab('ups',this)"><span class="tab-icon">⚡</span> UPS</button>
+  <button class="tab" onclick="setTab('equip',this)"><span class="tab-icon">🖨️</span> Equipment</button>
+</div>
+
+<div class="content" id="content"></div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modal-body"></div>
+</div>
+
+<script>
+const FLOORS = ['Ground Floor','1st Floor','2nd Floor','3rd Floor','Outdoor'];
+const WINGS  = ['Primary','Middle','Senior'];
+const NVRS   = ['NVR 1','NVR 2','NVR 3','NVR 4'];
+const UPS_T  = ['5 KVA','3 KVA','2 KVA','1 KVA','Other'];
+
+let DB = {
+  tab: 'overview',
+  cctv: [
+    {id:1,floor:'Ground Floor',room:'101',cls:'Nursery',sec:'A',brand:'Hikvision',ip:'192.168.1.10',nvr:'NVR 1',speaker:'Yes',loc:'Classroom'},
+    {id:2,floor:'Ground Floor',room:'GF-C',cls:'—',sec:'—',brand:'Dahua',ip:'192.168.1.11',nvr:'NVR 1',speaker:'No',loc:'Corridor'},
+    {id:3,floor:'1st Floor',room:'201',cls:'Class 1',sec:'A',brand:'Hikvision',ip:'192.168.1.20',nvr:'NVR 2',speaker:'Yes',loc:'Classroom'},
+    {id:4,floor:'Outdoor',room:'—',cls:'—',sec:'—',brand:'Hikvision',ip:'192.168.1.50',nvr:'NVR 4',speaker:'No',loc:'Front Gate'},
+    {id:5,floor:'Outdoor',room:'—',cls:'—',sec:'—',brand:'Dahua',ip:'192.168.1.51',nvr:'NVR 4',speaker:'No',loc:'Bus Parking'},
+  ],
+  smart: [
+    {id:1,wing:'Primary',room:'101',cls:'Nursery',sec:'A',bcomp:'Promethean',bpn:'ActivPanel-75',btype:'Smart Board',bsize:'75"',cau:'Intel NUC',os:'Windows 11',upsno:'UPS-P01',pen:'Yes',teacher:'Mrs. Sharma',hdate:'2024-04-01'},
+    {id:2,wing:'Middle',room:'301',cls:'Class 6',sec:'A',bcomp:'Samsung',bpn:'WA75C',btype:'Smart Board',bsize:'75"',cau:'Dell Optiplex',os:'Windows 10',upsno:'UPS-M01',pen:'Yes',teacher:'Mr. Gupta',hdate:'2024-04-01'},
+  ],
+  labs: [
+    {id:1,name:'Computer Lab Sr',room:'L-01',pcs:40,brand:'Dell',proc:'i5 10th Gen',ram:'8 GB',stor:'256 GB SSD',os:'Windows 11',ups:'5 KVA',printer:'HP LaserJet',status:'Functional'},
+    {id:2,name:'Computer Lab Pr',room:'L-02',pcs:25,brand:'HP',proc:'i3 8th Gen',ram:'4 GB',stor:'1 TB HDD',os:'Windows 10',ups:'3 KVA',printer:'Canon LBP',status:'Functional'},
+    {id:3,name:'ATL Lab',room:'L-03',pcs:15,brand:'Lenovo',proc:'i5 10th Gen',ram:'8 GB',stor:'256 GB SSD',os:'Windows 11',ups:'2 KVA',printer:'None',status:'Functional'},
+  ],
+  ups: [
+    {id:1,loc:'Server Room',type:'5 KVA',mode:'Online',brand:'APC',model:'SRT5KRMXLI',serial:'AP2024001',pdate:'2023-01-15',bdate:'2025-01-15',area:'GF — Server Room'},
+    {id:2,loc:'Computer Lab Sr',type:'5 KVA',mode:'Online',brand:'APC',model:'SRT5KRMXLI',serial:'AP2024002',pdate:'2023-01-15',bdate:'2025-01-15',area:'GF — Lab L-01'},
+    {id:3,loc:'Smart Class 101',type:'1 KVA',mode:'Normal',brand:'Luminous',model:'Eco Watt 1250',serial:'LU2024001',pdate:'2022-06-01',bdate:'2024-06-01',area:'GF — Room 101'},
+  ],
+  equip: [
+    {id:1,type:'EPBAX',brand:'Panasonic KX-NS700',loc:'Server Room',serial:'PAN2022001',pdate:'2022-03-01',amc:'Yes',status:'Functional',remark:'Main EPBAX'},
+    {id:2,type:'Photocopier',brand:'Canon iR2625i',loc:'Office',serial:'CAN2022001',pdate:'2022-01-10',amc:'Yes',status:'Functional',remark:'Admin Office'},
+    {id:3,type:'Laser Printer',brand:'HP LaserJet M404n',loc:'Principal Room',serial:'HP2023001',pdate:'2023-01-15',amc:'No',status:'Functional',remark:'B&W'},
+    {id:4,type:'Digital Signage',brand:'LG 55SM5KC',loc:'Reception',serial:'LG2023001',pdate:'2023-06-01',amc:'No',status:'Functional',remark:'LED Display'},
+  ],
+  nids:{cctv:6,smart:3,lab:4,ups:4,equip:5}
+};
+
+function save(){try{localStorage.setItem('dps_db',JSON.stringify(DB))}catch(e){}}
+function load(){try{const d=localStorage.getItem('dps_db');if(d){const p=JSON.parse(d);Object.assign(DB,p)}}catch(e){}}
+load();
+
+function setTab(t, el){
+  DB.tab=t;
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  if(el) el.classList.add('active');
+  render();
+}
+
+function render(){
+  const c=document.getElementById('content');
+  if(DB.tab==='overview') c.innerHTML=renderOverview();
+  else if(DB.tab==='cctv')    c.innerHTML=renderCCTV();
+  else if(DB.tab==='smart')   c.innerHTML=renderSmart();
+  else if(DB.tab==='labs')    c.innerHTML=renderLabs();
+  else if(DB.tab==='ups')     c.innerHTML=renderUPS();
+  else if(DB.tab==='equip')   c.innerHTML=renderEquip();
+}
+
+/* ---- OVERVIEW ---- */
+function renderOverview(){
+  const totalPCs = DB.labs.reduce((s,l)=>s+(+l.pcs||0),0);
+  return `
+  <div class="stat-grid">
+    <div class="stat-card"><div class="stat-icon">📷</div><div class="stat-num">${DB.cctv.length}</div><div class="stat-lbl">CCTV Cameras</div></div>
+    <div class="stat-card"><div class="stat-icon">🖥️</div><div class="stat-num">${DB.smart.length}</div><div class="stat-lbl">Smart Classrooms</div></div>
+    <div class="stat-card"><div class="stat-icon">💻</div><div class="stat-num">${DB.labs.length}</div><div class="stat-lbl">Labs</div></div>
+    <div class="stat-card"><div class="stat-icon">🖱️</div><div class="stat-num">${totalPCs}</div><div class="stat-lbl">Total Computers</div></div>
+    <div class="stat-card"><div class="stat-icon">⚡</div><div class="stat-num">${DB.ups.length}</div><div class="stat-lbl">UPS Units</div></div>
+    <div class="stat-card"><div class="stat-icon">🖨️</div><div class="stat-num">${DB.equip.length}</div><div class="stat-lbl">Equipment Items</div></div>
+  </div>
+  <div class="section-card">
+    <div style="font-weight:600;font-size:14px;color:var(--navy);margin-bottom:12px">📋 Register Index</div>
+    <table><thead><tr><th>#</th><th>Module</th><th>Description</th></tr></thead><tbody>
+      <tr><td>1</td><td>Surveillance Register</td><td>Floor-wise CCTV — Camera brand, IP, NVR mapped, Speaker</td></tr>
+      <tr><td>2</td><td>Smart Class Register</td><td>Wing-wise Smart Board, CAU, OS, UPS, Teacher handover</td></tr>
+      <tr><td>3</td><td>Labs Register</td><td>Computer Lab Sr/Pr, ATL, Bio Lab — PC specs, OS, UPS, Printer</td></tr>
+      <tr><td>4</td><td>UPS Register</td><td>All UPS — Type, Brand, Serial, Purchase & Battery Change Date</td></tr>
+      <tr><td>5</td><td>Equipment Register</td><td>EPBAX, Printers, Photocopiers, Digital Signage</td></tr>
+    </tbody></table>
+    <div class="info-box" style="margin-top:14px">⚡ NVR Circuit: Ground Floor → NVR 1 &nbsp;|&nbsp; 1st Floor → NVR 2 &nbsp;|&nbsp; 2nd/3rd Floor → NVR 3 &nbsp;|&nbsp; Outdoor → NVR 4 &nbsp;|&nbsp; APC 5 KVA UPS</div>
+    <div class="info-box" style="margin-top:8px">🏷️ All UPS must carry sticker: Placement Area | Purchase Date | Battery Change Date</div>
+  </div>`;
+}
+
+/* ---- CCTV ---- */
+function renderCCTV(){
+  const f=window._cf||'All';
+  const byFloor={};
+  DB.cctv.filter(c=>f==='All'||c.floor===f).forEach(c=>{
+    if(!byFloor[c.floor])byFloor[c.floor]=[];byFloor[c.floor].push(c);
+  });
+  const floorSections = Object.entries(byFloor).map(([fl,rows])=>`
+    <div class="floor-hdr">📷 ${fl} — ${rows.length} camera${rows.length>1?'s':''}</div>
+    <div class="tbl-wrap" style="margin-bottom:10px">
+    <table><thead><tr><th>S.No</th><th>Room</th><th>Class</th><th>Sec</th><th>Brand</th><th>IP Address</th><th>NVR</th><th>Speaker</th><th>Location</th><th>Del</th></tr></thead>
+    <tbody>${rows.map((c,i)=>`<tr>
+      <td>${i+1}</td><td>${c.room}</td><td>${c.cls}</td><td>${c.sec}</td><td>${c.brand}</td>
+      <td style="font-family:monospace;font-size:12px">${c.ip}</td>
+      <td><span class="badge b-blue">${c.nvr}</span></td>
+      <td><span class="badge ${c.speaker==='Yes'?'b-green':'b-gray'}">${c.speaker}</span></td>
+      <td>${c.loc}</td>
+      <td><button class="btn btn-sm btn-danger" onclick="del('cctv',${c.id})">🗑</button></td>
+    </tr>`).join('')}</tbody></table></div>`).join('');
+  return `<div class="section-card">
+    <div class="toolbar">
+      <select onchange="window._cf=this.value;render()">
+        <option value="All">All Floors</option>
+        ${FLOORS.map(f=>`<option${f===(window._cf||'All')?' selected':''}>${f}</option>`).join('')}
+      </select>
+      <div style="flex:1"></div>
+      <button class="btn btn-primary" onclick="openModal('cctv')">+ Add Camera</button>
+    </div>
+    ${Object.keys(byFloor).length===0?'<div class="empty"><div class="empty-icon">📷</div>No cameras added. Click "+ Add Camera"</div>':floorSections}
+    <div class="info-box">Maintenance: NVR health | Converter check | Cable condition | Camera cleaning</div>
+  </div>`;
+}
+
+/* ---- SMART CLASS ---- */
+function renderSmart(){
+  const w=window._sw||'All';
+  const byWing={};
+  DB.smart.filter(s=>w==='All'||s.wing===w).forEach(s=>{
+    if(!byWing[s.wing])byWing[s.wing]=[];byWing[s.wing].push(s);
+  });
+  const sections=Object.entries(byWing).map(([wn,rows])=>`
+    <div class="floor-hdr">🏫 ${wn} Wing — ${rows.length} room${rows.length>1?'s':''}</div>
+    <div class="tbl-wrap" style="margin-bottom:10px">
+    <table><thead><tr><th>S.No</th><th>Room</th><th>Class</th><th>Sec</th><th>Board Brand</th><th>P/N</th><th>Type</th><th>CAU</th><th>OS</th><th>UPS No.</th><th>Pen</th><th>Teacher</th><th>Del</th></tr></thead>
+    <tbody>${rows.map((s,i)=>`<tr>
+      <td>${i+1}</td><td>${s.room}</td><td>${s.cls}</td><td>${s.sec}</td>
+      <td>${s.bcomp}</td><td style="font-size:12px">${s.bpn}</td><td>${s.btype}</td><td>${s.cau}</td>
+      <td><span class="badge b-green">${s.os}</span></td>
+      <td>${s.upsno}</td>
+      <td><span class="badge ${s.pen==='Yes'?'b-green':'b-gray'}">${s.pen}</span></td>
+      <td>${s.teacher}</td>
+      <td><button class="btn btn-sm btn-danger" onclick="del('smart',${s.id})">🗑</button></td>
+    </tr>`).join('')}</tbody></table></div>`).join('');
+  return `<div class="section-card">
+    <div class="toolbar">
+      <select onchange="window._sw=this.value;render()">
+        <option value="All">All Wings</option>
+        ${WINGS.map(w=>`<option${w===(window._sw||'All')?' selected':''}>${w}</option>`).join('')}
+      </select>
+      <div style="flex:1"></div>
+      <button class="btn btn-primary" onclick="openModal('smart')">+ Add Classroom</button>
+    </div>
+    ${Object.keys(byWing).length===0?'<div class="empty"><div class="empty-icon">🖥️</div>No classrooms added.</div>':sections}
+    <div class="info-box">Per Class page: Keyboard | Mouse | Speakers | Cabinet | Magnetic Pen | Maintenance | Teacher Sign | Issues Log</div>
+  </div>`;
+}
+
+/* ---- LABS ---- */
+function renderLabs(){
+  const rows=DB.labs.map((l,i)=>`<tr>
+    <td>${i+1}</td><td><strong>${l.name}</strong></td><td>${l.room}</td>
+    <td style="text-align:center;font-weight:600">${l.pcs}</td>
+    <td>${l.brand}</td><td>${l.proc}</td><td>${l.ram}</td><td>${l.stor}</td>
+    <td><span class="badge b-blue">${l.os}</span></td>
+    <td>${l.ups}</td><td>${l.printer}</td>
+    <td><span class="badge ${l.status==='Functional'?'b-green':'b-amber'}">${l.status}</span></td>
+    <td><button class="btn btn-sm btn-danger" onclick="del('labs',${l.id})">🗑</button></td>
+  </tr>`).join('');
+  return `<div class="section-card">
+    <div class="toolbar">
+      <span style="font-size:13px;color:var(--muted)">${DB.labs.length} lab${DB.labs.length!==1?'s':''} registered</span>
+      <div style="flex:1"></div>
+      <button class="btn btn-primary" onclick="openModal('lab')">+ Add Lab</button>
+    </div>
+    <div class="tbl-wrap">
+    <table><thead><tr><th>S.No</th><th>Lab Name</th><th>Room</th><th>PCs</th><th>Brand</th><th>Processor</th><th>RAM</th><th>Storage</th><th>OS</th><th>UPS</th><th>Printer</th><th>Status</th><th>Del</th></tr></thead>
+    <tbody>${rows||'<tr><td colspan="13" class="empty">No labs added.</td></tr>'}</tbody></table></div>
+  </div>`;
+}
+
+/* ---- UPS ---- */
+function renderUPS(){
+  const rows=DB.ups.map((u,i)=>`<tr>
+    <td>${i+1}</td><td>${u.loc}</td>
+    <td><span class="badge b-blue">${u.type}</span></td>
+    <td><span class="badge ${u.mode==='Online'?'b-green':'b-amber'}">${u.mode}</span></td>
+    <td>${u.brand}</td><td style="font-size:12px">${u.model}</td>
+    <td style="font-family:monospace;font-size:12px">${u.serial}</td>
+    <td>${u.pdate}</td><td>${u.bdate}</td><td>${u.area}</td>
+    <td><button class="btn btn-sm btn-danger" onclick="del('ups',${u.id})">🗑</button></td>
+  </tr>`).join('');
+  return `<div class="section-card">
+    <div class="toolbar">
+      <span style="font-size:13px;color:var(--muted)">${DB.ups.length} UPS unit${DB.ups.length!==1?'s':''}</span>
+      <div style="flex:1"></div>
+      <button class="btn btn-primary" onclick="openModal('ups')">+ Add UPS</button>
+    </div>
+    <div class="tbl-wrap">
+    <table><thead><tr><th>S.No</th><th>Location</th><th>Type</th><th>Mode</th><th>Brand</th><th>Model</th><th>Serial No.</th><th>Purchase Date</th><th>Battery Change</th><th>Placed Area</th><th>Del</th></tr></thead>
+    <tbody>${rows||'<tr><td colspan="11" class="empty">No UPS added.</td></tr>'}</tbody></table></div>
+    <div class="info-box">★ All UPS sticker: Placement Area | Purchase Date | Battery Change Date | Model/Serial</div>
+  </div>`;
+}
+
+/* ---- EQUIPMENT ---- */
+function renderEquip(){
+  const rows=DB.equip.map((e,i)=>`<tr>
+    <td>${i+1}</td><td>${e.type}</td><td>${e.brand}</td><td>${e.loc}</td>
+    <td style="font-family:monospace;font-size:12px">${e.serial}</td>
+    <td>${e.pdate}</td>
+    <td><span class="badge ${e.amc==='Yes'?'b-green':'b-gray'}">${e.amc}</span></td>
+    <td><span class="badge ${e.status==='Functional'?'b-green':'b-amber'}">${e.status}</span></td>
+    <td>${e.remark}</td>
+    <td><button class="btn btn-sm btn-danger" onclick="del('equip',${e.id})">🗑</button></td>
+  </tr>`).join('');
+  return `<div class="section-card">
+    <div class="toolbar">
+      <span style="font-size:13px;color:var(--muted)">${DB.equip.length} items</span>
+      <div style="flex:1"></div>
+      <button class="btn btn-primary" onclick="openModal('equip')">+ Add Equipment</button>
+    </div>
+    <div class="tbl-wrap">
+    <table><thead><tr><th>S.No</th><th>Type</th><th>Brand/Model</th><th>Location</th><th>Serial No.</th><th>Purchase Date</th><th>AMC</th><th>Status</th><th>Remark</th><th>Del</th></tr></thead>
+    <tbody>${rows||'<tr><td colspan="10" class="empty">No equipment added.</td></tr>'}</tbody></table></div>
+  </div>`;
+}
+
+/* ---- MODAL ---- */
+function openModal(type){
+  const bg=document.getElementById('modal-bg');
+  const body=document.getElementById('modal-body');
+  let fields='',title='';
+  if(type==='cctv'){
+    title='Add CCTV Camera';
+    fields=`<div class="form-grid">
+      <div class="ff"><label>Floor</label><select id="f1">${FLOORS.map(f=>`<option>${f}</option>`).join('')}</select></div>
+      <div class="ff"><label>Room No.</label><input id="f2" placeholder="101"></div>
+      <div class="ff"><label>Class</label><input id="f3" placeholder="Class 1"></div>
+      <div class="ff"><label>Section</label><input id="f4" placeholder="A"></div>
+      <div class="ff"><label>Camera Brand</label><input id="f5" placeholder="Hikvision / Dahua"></div>
+      <div class="ff"><label>IP / IA Address</label><input id="f6" placeholder="192.168.1.x"></div>
+      <div class="ff"><label>Mapped NVR</label><select id="f7">${NVRS.map(n=>`<option>${n}</option>`).join('')}</select></div>
+      <div class="ff"><label>Speaker</label><select id="f8"><option>Yes</option><option>No</option></select></div>
+      <div class="ff full"><label>Location</label><input id="f9" placeholder="Classroom / Corridor / Gate..."></div>
+    </div>`;
+  } else if(type==='smart'){
+    title='Add Smart Classroom';
+    fields=`<div class="form-grid">
+      <div class="ff"><label>Wing</label><select id="f1">${WINGS.map(w=>`<option>${w}</option>`).join('')}</select></div>
+      <div class="ff"><label>Room No.</label><input id="f2" placeholder="101"></div>
+      <div class="ff"><label>Class</label><input id="f3" placeholder="Nursery / Class 6"></div>
+      <div class="ff"><label>Section</label><input id="f4" placeholder="A"></div>
+      <div class="ff"><label>Board Company</label><input id="f5" placeholder="Promethean / Samsung"></div>
+      <div class="ff"><label>Board P/N</label><input id="f6" placeholder="Model No."></div>
+      <div class="ff"><label>Board Type</label><input id="f7" placeholder="Smart Board / Green White"></div>
+      <div class="ff"><label>Board Size</label><input id="f8" placeholder='75" / 8x4 ft'></div>
+      <div class="ff"><label>CAU / System</label><input id="f9" placeholder="Intel NUC / Dell..."></div>
+      <div class="ff"><label>OS</label><select id="f10"><option>Windows 11</option><option>Windows 10</option><option>Linux</option></select></div>
+      <div class="ff"><label>UPS No.</label><input id="f11" placeholder="UPS-P01"></div>
+      <div class="ff"><label>Magnetic Pen</label><select id="f12"><option>Yes</option><option>No</option></select></div>
+      <div class="ff"><label>Handed To (Teacher)</label><input id="f13" placeholder="Mrs. Sharma"></div>
+      <div class="ff"><label>Date Handed</label><input type="date" id="f14"></div>
+    </div>`;
+  } else if(type==='lab'){
+    title='Add Lab';
+    fields=`<div class="form-grid">
+      <div class="ff full"><label>Lab Name</label><input id="f1" placeholder="Computer Lab Sr / ATL Lab..."></div>
+      <div class="ff"><label>Room No.</label><input id="f2" placeholder="L-01"></div>
+      <div class="ff"><label>Total PCs</label><input type="number" id="f3" placeholder="40"></div>
+      <div class="ff"><label>PC Brand</label><input id="f4" placeholder="Dell / HP"></div>
+      <div class="ff"><label>Processor</label><input id="f5" placeholder="i5 10th Gen"></div>
+      <div class="ff"><label>RAM</label><input id="f6" placeholder="8 GB"></div>
+      <div class="ff"><label>Storage</label><input id="f7" placeholder="256 GB SSD"></div>
+      <div class="ff"><label>OS</label><input id="f8" placeholder="Windows 11"></div>
+      <div class="ff"><label>UPS</label><input id="f9" placeholder="5 KVA"></div>
+      <div class="ff"><label>Printer</label><input id="f10" placeholder="HP LaserJet / None"></div>
+      <div class="ff full"><label>Status</label><select id="f11"><option>Functional</option><option>Under Repair</option><option>Not Working</option></select></div>
+    </div>`;
+  } else if(type==='ups'){
+    title='Add UPS';
+    fields=`<div class="form-grid">
+      <div class="ff full"><label>Location</label><input id="f1" placeholder="Computer Lab Sr / Smart Class GF..."></div>
+      <div class="ff"><label>Type</label><select id="f2">${UPS_T.map(u=>`<option>${u}</option>`).join('')}</select></div>
+      <div class="ff"><label>Mode</label><select id="f3"><option>Online</option><option>Normal</option></select></div>
+      <div class="ff"><label>Brand</label><input id="f4" placeholder="APC / Luminous"></div>
+      <div class="ff"><label>Model</label><input id="f5" placeholder="Model No."></div>
+      <div class="ff"><label>Serial No.</label><input id="f6" placeholder="Serial No."></div>
+      <div class="ff"><label>Purchase Date</label><input type="date" id="f7"></div>
+      <div class="ff"><label>Battery Change Date</label><input type="date" id="f8"></div>
+      <div class="ff full"><label>Placed Area (for sticker)</label><input id="f9" placeholder="GF — Server Room"></div>
+    </div>`;
+  } else if(type==='equip'){
+    title='Add Equipment';
+    fields=`<div class="form-grid">
+      <div class="ff"><label>Type</label><input id="f1" placeholder="EPBAX / Printer / Photocopier..."></div>
+      <div class="ff"><label>Brand / Model</label><input id="f2" placeholder="Panasonic KX-NS700"></div>
+      <div class="ff"><label>Location</label><input id="f3" placeholder="Server Room / Office"></div>
+      <div class="ff"><label>Serial No.</label><input id="f4" placeholder="Serial No."></div>
+      <div class="ff"><label>Purchase Date</label><input type="date" id="f5"></div>
+      <div class="ff"><label>AMC</label><select id="f6"><option>Yes</option><option>No</option></select></div>
+      <div class="ff"><label>Status</label><select id="f7"><option>Functional</option><option>Under Repair</option><option>Not Working</option></select></div>
+      <div class="ff full"><label>Remarks</label><input id="f8" placeholder="Any notes..."></div>
+    </div>`;
+  }
+  body.innerHTML=`<h3>${title}</h3>${fields}
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEntry('${type}')">✔ Save</button>
+    </div>`;
+  bg.classList.add('open');
+}
+
+function closeModal(){document.getElementById('modal-bg').classList.remove('open');}
+function g(id){const e=document.getElementById(id);return e?e.value:'';}
+
+function saveEntry(type){
+  if(type==='cctv'){
+    DB.cctv.push({id:DB.nids.cctv++,floor:g('f1'),room:g('f2')||'—',cls:g('f3')||'—',sec:g('f4')||'—',brand:g('f5'),ip:g('f6'),nvr:g('f7'),speaker:g('f8'),loc:g('f9')});
+  } else if(type==='smart'){
+    DB.smart.push({id:DB.nids.smart++,wing:g('f1'),room:g('f2'),cls:g('f3'),sec:g('f4'),bcomp:g('f5'),bpn:g('f6'),btype:g('f7'),bsize:g('f8'),cau:g('f9'),os:g('f10'),upsno:g('f11'),pen:g('f12'),teacher:g('f13'),hdate:g('f14')});
+  } else if(type==='lab'){
+    DB.labs.push({id:DB.nids.lab++,name:g('f1'),room:g('f2'),pcs:g('f3'),brand:g('f4'),proc:g('f5'),ram:g('f6'),stor:g('f7'),os:g('f8'),ups:g('f9'),printer:g('f10'),status:g('f11')});
+  } else if(type==='ups'){
+    DB.ups.push({id:DB.nids.ups++,loc:g('f1'),type:g('f2'),mode:g('f3'),brand:g('f4'),model:g('f5'),serial:g('f6'),pdate:g('f7'),bdate:g('f8'),area:g('f9')});
+  } else if(type==='equip'){
+    DB.equip.push({id:DB.nids.equip++,type:g('f1'),brand:g('f2'),loc:g('f3'),serial:g('f4'),pdate:g('f5'),amc:g('f6'),status:g('f7'),remark:g('f8')});
+  }
+  save(); closeModal(); render();
+}
+
+function del(type,id){
+  if(!confirm('Delete this entry?')) return;
+  if(type==='cctv') DB.cctv=DB.cctv.filter(x=>x.id!==id);
+  else if(type==='smart') DB.smart=DB.smart.filter(x=>x.id!==id);
+  else if(type==='labs') DB.labs=DB.labs.filter(x=>x.id!==id);
+  else if(type==='ups') DB.ups=DB.ups.filter(x=>x.id!==id);
+  else if(type==='equip') DB.equip=DB.equip.filter(x=>x.id!==id);
+  save(); render();
+}
+
+render();
+</script>
+</body>
+</html>
