@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96">
+  <rect width="96" height="96" rx="12" fill="#0d2e5c"/>
+  <rect x="8" y="8" width="81" height="81" rx="9" fill="#e8a020"/>
+  <text x="48" y="64" font-family="Arial,sans-serif" font-size="32" font-weight="bold" fill="white" text-anchor="middle">DPS</text>
+</svg>

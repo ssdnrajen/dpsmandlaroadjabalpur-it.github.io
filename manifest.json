@@ -1,0 +1,44 @@
+{
+  "name": "DPS Jabalpur — Digital Infrastructure Register",
+  "short_name": "DPS IT Register",
+  "description": "Delhi Public School Jabalpur — IT Infrastructure Management System",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0d2e5c",
+  "theme_color": "#0d2e5c",
+  "lang": "en",
+  "categories": ["productivity", "education"],
+  "icons": [
+    { "src": "icon-72.svg",  "sizes": "72x72",   "type": "image/svg+xml", "purpose": "any maskable" },
+    { "src": "icon-96.svg",  "sizes": "96x96",   "type": "image/svg+xml", "purpose": "any maskable" },
+    { "src": "icon-128.svg", "sizes": "128x128", "type": "image/svg+xml", "purpose": "any maskable" },
+    { "src": "icon-144.svg", "sizes": "144x144", "type": "image/svg+xml", "purpose": "any maskable" },
+    { "src": "icon-152.svg", "sizes": "152x152", "type": "image/svg+xml", "purpose": "any maskable" },
+    { "src": "icon-192.svg", "sizes": "192x192", "type": "image/svg+xml", "purpose": "any maskable" },
+    { "src": "icon-384.svg", "sizes": "384x384", "type": "image/svg+xml", "purpose": "any maskable" },
+    { "src": "icon-512.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "any maskable" }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Surveillance Register",
+      "short_name": "CCTV",
+      "description": "CCTV Camera Register",
+      "url": "./index.html#cctv"
+    },
+    {
+      "name": "Maintenance Log",
+      "short_name": "Maintenance",
+      "description": "Maintenance Log",
+      "url": "./index.html#maint"
+    },
+    {
+      "name": "AMC Register",
+      "short_name": "AMC",
+      "description": "AMC Register",
+      "url": "./index.html#amc"
+    }
+  ]
+}
