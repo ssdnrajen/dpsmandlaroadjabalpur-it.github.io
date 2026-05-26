@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>DPS Jabalpur — Digital Infrastructure Register</title>
+<meta name="theme-color" content="#0d2e5c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="DPS IT Register">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.svg">
+<link rel="icon" type="image/svg+xml" href="icon-96.svg">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f4fa;min-height:100vh}
+:root{--navy:#0d2e5c;--navy2:#1a4a8a;--accent:#e8a020;--light:#eaf1fb;--border:#dde3ee;--text:#2c2c2a;--muted:#6b7280}
+/* HEADER */
+.hdr{background:var(--navy);color:#fff;padding:0 16px;display:flex;align-items:center;gap:10px;height:54px;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.logo{width:34px;height:34px;background:var(--accent);border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:#fff;flex-shrink:0}
+.hdr h1{font-size:14px;font-weight:600;flex:1}
+.hdr small{font-size:10px;opacity:.6;display:block}
+/* TABS */
+.tabs{display:flex;background:#fff;border-bottom:2px solid var(--border);padding:0 10px;overflow-x:auto;position:sticky;top:54px;z-index:40;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.tab{padding:9px 13px;font-size:12px;font-weight:500;cursor:pointer;border:none;background:none;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap}
+.tab:hover{color:var(--navy2);background:#f4f8ff}
+.tab.active{color:var(--navy2);border-bottom-color:var(--navy2)}
+/* CONTENT */
+.content{max-width:1200px;margin:0 auto;padding:14px}
+.card{background:#fff;border-radius:10px;padding:16px;margin-bottom:12px;border:1px solid var(--border)}
+/* TOOLBAR */
+.toolbar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+.toolbar select{font-size:12px;padding:5px 9px;border:1px solid var(--border);border-radius:7px;background:#fff;color:var(--text);height:30px;outline:none}
+/* BUTTONS */
+.btn{padding:5px 11px;font-size:12px;border:1px solid var(--border);border-radius:7px;cursor:pointer;background:#fff;color:var(--text);display:inline-flex;align-items:center;gap:4px;height:30px;white-space:nowrap;font-family:inherit;font-weight:500}
+.btn:hover{background:#f4f8ff;border-color:var(--navy2);color:var(--navy2)}
+.btn-p{background:var(--navy);color:#fff;border-color:var(--navy)}
+.btn-p:hover{background:var(--navy2);color:#fff;border-color:var(--navy2)}
+.btn-e{background:#eff6ff;border-color:#3b82f6;color:#1d4ed8}
+.btn-d{background:#fff;border-color:#fca5a5;color:#b91c1c}
+.btn-d:hover{background:#fef2f2}
+.btn-g{background:#047857;color:#fff;border-color:#047857}
+.btn-sm{padding:2px 7px;font-size:11px;height:22px;border-radius:5px}
+/* TABLE */
+.tw{overflow-x:auto;border:1px solid var(--border);border-radius:8px}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:500px}
+thead th{background:var(--navy);color:#fff;padding:8px 10px;font-weight:500;text-align:left;font-size:11px;white-space:nowrap}
+tbody tr:nth-child(even){background:#f8faff}
+tbody tr:hover{background:#edf2ff}
+td{padding:7px 10px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+/* BADGES */
+.b{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600}
+.bg{background:#dcfce7;color:#166534}
+.ba{background:#fef3c7;color:#92400e}
+.bb{background:#dbeafe;color:#1e40af}
+.br{background:#fee2e2;color:#991b1b}
+.bx{background:#f3f4f6;color:#4b5563}
+/* STATS */
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:14px}
+.sc{background:#fff;border:1px solid var(--border);border-radius:9px;padding:12px;text-align:center}
+.sn{font-size:24px;font-weight:700;color:var(--navy2)}
+.sl{font-size:11px;color:var(--muted);margin-top:2px}
+.fh{background:var(--navy2);color:#fff;padding:6px 12px;font-size:11px;font-weight:600;border-radius:7px;margin:10px 0 5px}
+.ib{background:var(--light);border-radius:7px;padding:8px 12px;font-size:11px;color:var(--navy2);margin-top:10px;border-left:3px solid var(--navy2)}
+.empty{text-align:center;padding:28px;color:var(--muted);font-size:13px}
+/* MODAL */
+.mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center;padding:14px}
+.mbg.open{display:flex}
+.mbox{background:#fff;border-radius:12px;padding:20px;width:100%;max-width:540px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.18)}
+.mbox h3{font-size:14px;font-weight:600;margin-bottom:14px;color:var(--navy);border-bottom:2px solid var(--light);padding-bottom:8px}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ff{display:flex;flex-direction:column;gap:3px}
+.ff.full{grid-column:1/-1}
+.ff label{font-size:11px;color:var(--muted);font-weight:500}
+.ff input,.ff select{font-size:12px;padding:6px 8px;border:1px solid var(--border);border-radius:7px;background:#fff;color:var(--text);outline:none;font-family:inherit}
+.ff input:focus,.ff select:focus{border-color:var(--navy2)}
+.mf{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;padding-top:12px;border-top:1px solid var(--border)}
+/* LOGIN */
+#LS{display:none;position:fixed;inset:0;background:linear-gradient(135deg,#0d2e5c,#1a4a8a 60%,#0f5132);z-index:9999;align-items:center;justify-content:center;padding:20px}
+#LS.show{display:flex}
+.lb{background:#fff;border-radius:16px;padding:32px 28px;width:100%;max-width:360px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.ll{width:56px;height:56px;background:var(--accent);border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;color:#fff;margin:0 auto 10px}
+.lt{text-align:center;font-size:17px;font-weight:700;color:var(--navy);margin-bottom:2px}
+.ls{text-align:center;font-size:11px;color:var(--muted);margin-bottom:20px;line-height:1.5}
+.lf2{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+.lf2 label{font-size:12px;font-weight:600;color:var(--text)}
+.lf2 input{padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;outline:none;font-family:inherit}
+.lf2 input:focus{border-color:var(--navy2);box-shadow:0 0 0 3px rgba(26,74,138,.1)}
+.le{background:#fef2f2;color:#b91c1c;border-radius:7px;padding:8px 12px;font-size:12px;margin-bottom:10px;border:1px solid #fca5a5;display:none;line-height:1.5}
+.le.show{display:block}
+.lb-btn{width:100%;background:var(--navy);color:#fff;border:none;border-radius:8px;padding:11px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:4px}
+.lb-btn:hover{background:var(--navy2)}
+.lhint{text-align:center;font-size:11px;color:var(--muted);margin-top:12px;background:#f8faff;padding:8px;border-radius:7px;border:1px solid var(--border)}
+/* USER BADGE + MENU */
+.ubadge{background:rgba(255,255,255,.15);border-radius:20px;padding:4px 11px;font-size:11px;color:#fff;cursor:pointer;border:1px solid rgba(255,255,255,.2);white-space:nowrap;position:relative}
+.ubadge:hover{background:rgba(255,255,255,.25)}
+.umenu{position:fixed;top:54px;right:16px;background:#fff;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.15);border:1px solid var(--border);min-width:180px;z-index:300;display:none}
+.umenu.open{display:block}
+.umi{padding:10px 16px;font-size:13px;cursor:pointer;color:var(--text);display:flex;align-items:center;gap:8px}
+.umi:hover{background:#f4f8ff;color:var(--navy2)}
+.umi.danger{color:#b91c1c}
+.umi.danger:hover{background:#fef2f2}
+.udiv{height:1px;background:var(--border);margin:4px 0}
+/* PRINT */
+@media print{
+  body{background:#fff}
+  .hdr,.tabs,.toolbar,.abtn,.no-print{display:none!important}
+  .content{padding:0;max-width:100%}
+  .card{box-shadow:none;border:1px solid #ccc;border-radius:0;page-break-inside:avoid}
+  .tw{border:none}
+  table{font-size:10px}
+  thead th{background:#0d2e5c!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .fh{background:#1a4a8a!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;border-radius:0}
+  .ph{display:block!important}
+}
+.ph{display:none;text-align:center;margin-bottom:12px;border-bottom:2px solid #0d2e5c;padding-bottom:8px}
+.ph h2{font-size:16px;color:#0d2e5c;font-weight:700}
+.ph p{font-size:11px;color:#555;margin-top:3px}
+@media(max-width:600px){.fg{grid-template-columns:1fr}.sg{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="LS" class="show">
+  <div class="lb">
+    <div class="ll">DPS</div>
+    <div class="lt">Digital Infrastructure Register</div>
+    <div class="ls">Delhi Public School, Jabalpur<br>IT Management System</div>
+    <div class="le" id="LE"></div>
+    <div class="lf2">
+      <label>Username</label>
+      <input id="LU" type="text" placeholder="admin" autocomplete="username">
+    </div>
+    <div class="lf2">
+      <label>Password</label>
+      <input id="LP" type="password" placeholder="dps@2025" autocomplete="current-password">
+    </div>
+    <button class="lb-btn" id="LB">Login</button>
+    <div class="lhint">Default Login:<br><strong>Username:</strong> admin &nbsp;&nbsp; <strong>Password:</strong> dps@2025</div>
+  </div>
+</div>
+
+<!-- CHANGE PASSWORD -->
+<div class="mbg" id="pwdModal">
+  <div class="mbox">
+    <h3>Change Password</h3>
+    <div id="pwdErr" style="display:none;background:#fef2f2;color:#b91c1c;border-radius:7px;padding:8px 12px;font-size:12px;margin-bottom:10px;border:1px solid #fca5a5"></div>
+    <div id="pwdOk" style="display:none;background:#dcfce7;color:#166534;border-radius:7px;padding:8px 12px;font-size:12px;margin-bottom:10px;border:1px solid #86efac"></div>
+    <div class="fg">
+      <div class="ff full"><label>Purana Password</label><input id="pwOld" type="password" placeholder="Purana password"></div>
+      <div class="ff full"><label>Naya Password</label><input id="pwNew" type="password" placeholder="Min 6 characters"></div>
+      <div class="ff full"><label>Confirm Password</label><input id="pwCon" type="password" placeholder="Dobara daalo"></div>
+    </div>
+    <div class="mf">
+      <button class="btn" onclick="closePwd()">Cancel</button>
+      <button class="btn btn-p" onclick="changePwd()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- USER MENU -->
+<div class="umenu" id="UM">
+  <div class="umi" id="miUsers" style="display:none" onclick="gotoUsers()">👥 User Management</div>
+  <div class="umi" onclick="openPwd()">🔑 Password Change</div>
+  <div class="udiv"></div>
+  <div class="umi danger" onclick="doLogout()">🚪 Logout</div>
+</div>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="logo">DPS</div>
+  <div style="flex:1">
+    <h1>Digital Infrastructure Register</h1>
+    <small>Delhi Public School, Jabalpur</small>
+  </div>
+  <button class="btn btn-g no-print" onclick="window.print()">Print</button>
+  <div class="ubadge" id="UB">User ▾</div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab active" id="t0" onclick="go('overview',this)">Overview</button>
+  <button class="tab" id="t1" onclick="go('cctv',this)">CCTV</button>
+  <button class="tab" id="t2" onclick="go('smart',this)">Smart Class</button>
+  <button class="tab" id="t3" onclick="go('labs',this)">Labs</button>
+  <button class="tab" id="t4" onclick="go('ups',this)">UPS</button>
+  <button class="tab" id="t5" onclick="go('equip',this)">Equipment</button>
+  <button class="tab" id="t6" onclick="go('office',this)">Office Depts</button>
+  <button class="tab" id="t7" onclick="go('maint',this)">Maintenance</button>
+  <button class="tab" id="t8" onclick="go('amc',this)">AMC Register</button>
+  <button class="tab" id="t9" onclick="go('users',this)" style="display:none">Users</button>
+</div>
+
+<div class="content" id="CT"></div>
+
+<!-- MAIN MODAL -->
+<div class="mbg" id="MB" onclick="if(event.target===this)closeMod()">
+  <div class="mbox" id="MI"></div>
+</div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+var DB = {
+  tab: 'overview',
+  cctv: [
+    {id:1,floor:'Ground Floor',room:'101',cls:'Nursery',sec:'A',brand:'Hikvision',ip:'192.168.1.10',nvr:'NVR 1',speaker:'Yes',loc:'Classroom'},
+    {id:2,floor:'Ground Floor',room:'GF-C',cls:'—',sec:'—',brand:'Dahua',ip:'192.168.1.11',nvr:'NVR 1',speaker:'No',loc:'Corridor'},
+    {id:3,floor:'1st Floor',room:'201',cls:'Class 1',sec:'A',brand:'Hikvision',ip:'192.168.1.20',nvr:'NVR 2',speaker:'Yes',loc:'Classroom'},
+    {id:4,floor:'Outdoor',room:'—',cls:'—',sec:'—',brand:'Hikvision',ip:'192.168.1.50',nvr:'NVR 4',speaker:'No',loc:'Front Gate'},
+    {id:5,floor:'Outdoor',room:'—',cls:'—',sec:'—',brand:'Dahua',ip:'192.168.1.51',nvr:'NVR 4',speaker:'No',loc:'Bus Parking'}
+  ],
+  smart: [
+    {id:1,wing:'Primary',room:'101',cls:'Nursery',sec:'A',bcomp:'Promethean',bpn:'ActivPanel-75',btype:'Smart Board',bsize:'75in',cau:'Intel NUC',os:'Windows 11',upsno:'UPS-P01',pen:'Yes',teacher:'Mrs. Sharma',hdate:'2024-04-01'},
+    {id:2,wing:'Middle',room:'301',cls:'Class 6',sec:'A',bcomp:'Samsung',bpn:'WA75C',btype:'Smart Board',bsize:'75in',cau:'Dell Optiplex',os:'Windows 10',upsno:'UPS-M01',pen:'Yes',teacher:'Mr. Gupta',hdate:'2024-04-01'}
+  ],
+  labs: [
+    {id:1,name:'Computer Lab Sr',room:'L-01',pcs:40,brand:'Dell',proc:'i5 10th Gen',ram:'8 GB',stor:'256 GB SSD',os:'Windows 11',ups:'5 KVA',printer:'HP LaserJet',status:'Functional'},
+    {id:2,name:'Computer Lab Pr',room:'L-02',pcs:25,brand:'HP',proc:'i3 8th Gen',ram:'4 GB',stor:'1 TB HDD',os:'Windows 10',ups:'3 KVA',printer:'Canon LBP',status:'Functional'},
+    {id:3,name:'ATL Lab',room:'L-03',pcs:15,brand:'Lenovo',proc:'i5 10th Gen',ram:'8 GB',stor:'256 GB SSD',os:'Windows 11',ups:'2 KVA',printer:'None',status:'Functional'}
+  ],
+  ups: [
+    {id:1,loc:'Server Room',type:'5 KVA',mode:'Online',brand:'APC',model:'SRT5KRMXLI',serial:'AP2024001',pdate:'2023-01-15',bdate:'2025-01-15',area:'GF — Server Room'},
+    {id:2,loc:'Computer Lab Sr',type:'5 KVA',mode:'Online',brand:'APC',model:'SRT5KRMXLI',serial:'AP2024002',pdate:'2023-01-15',bdate:'2025-01-15',area:'GF — Lab L-01'},
+    {id:3,loc:'Smart Class 101',type:'1 KVA',mode:'Normal',brand:'Luminous',model:'Eco Watt 1250',serial:'LU2024001',pdate:'2022-06-01',bdate:'2024-06-01',area:'GF — Room 101'}
+  ],
+  equip: [
+    {id:1,type:'EPBAX',brand:'Panasonic KX-NS700',loc:'Server Room',serial:'PAN2022001',pdate:'2022-03-01',amc:'Yes',status:'Functional',remark:'Main EPBAX'},
+    {id:2,type:'Photocopier',brand:'Canon iR2625i',loc:'Office',serial:'CAN2022001',pdate:'2022-01-10',amc:'Yes',status:'Functional',remark:'Admin Office'},
+    {id:3,type:'Laser Printer',brand:'HP LaserJet M404n',loc:'Principal Room',serial:'HP2023001',pdate:'2023-01-15',amc:'No',status:'Functional',remark:'B&W'},
+    {id:4,type:'Digital Signage',brand:'LG 55SM5KC',loc:'Reception',serial:'LG2023001',pdate:'2023-06-01',amc:'No',status:'Functional',remark:'LED Display'}
+  ],
+  office: [
+    {id:1,dept:'MD 1',room:'OF-MD1',item:'Desktop PC',brand:'Dell',model:'Optiplex 3090',serial:'DL2023001',os:'Windows 11',ups:'1 KVA',printer:'HP LaserJet',internet:'Yes',phone:'Ext 101',status:'Functional',remark:''},
+    {id:2,dept:'MD 2',room:'OF-MD2',item:'Desktop PC',brand:'HP',model:'EliteDesk 800',serial:'HP2023001',os:'Windows 11',ups:'1 KVA',printer:'Canon LBP',internet:'Yes',phone:'Ext 102',status:'Functional',remark:''},
+    {id:3,dept:'Principal',room:'OF-PR',item:'Desktop PC',brand:'Dell',model:'Optiplex 5090',serial:'DL2023002',os:'Windows 11',ups:'1 KVA',printer:'HP LaserJet M479',internet:'Yes',phone:'Ext 100',status:'Functional',remark:'Color Printer'},
+    {id:4,dept:'Admin',room:'OF-AD',item:'Desktop PC',brand:'HP',model:'ProDesk 400',serial:'HP2023002',os:'Windows 10',ups:'2 KVA',printer:'HP LaserJet',internet:'Yes',phone:'Ext 103',status:'Functional',remark:''},
+    {id:5,dept:'Accounts',room:'OF-AC',item:'Desktop PC',brand:'Dell',model:'Optiplex 3090',serial:'DL2023003',os:'Windows 10',ups:'2 KVA',printer:'Canon iR2625i',internet:'Yes',phone:'Ext 104',status:'Functional',remark:'Photocopier also'},
+    {id:6,dept:'Store',room:'OF-ST',item:'Desktop PC',brand:'Lenovo',model:'ThinkCentre M70',serial:'LN2023001',os:'Windows 10',ups:'1 KVA',printer:'None',internet:'Yes',phone:'Ext 105',status:'Functional',remark:''},
+    {id:7,dept:'Hostel',room:'OF-HO',item:'Desktop PC',brand:'HP',model:'ProDesk 400',serial:'HP2023003',os:'Windows 10',ups:'1 KVA',printer:'HP LaserJet',internet:'Yes',phone:'Ext 106',status:'Functional',remark:''}
+  ],
+  maint: [
+    {id:1,date:'2025-01-10',dept:'Labs',item:'Computer Lab Sr - PC 12',issue:'Screen not working',action:'Monitor replaced',by:'Rajendra',cost:'2500',status:'Resolved',nextDate:'2026-01-10'},
+    {id:2,date:'2025-02-15',dept:'CCTV',item:'NVR 2 - 1st Floor',issue:'HDD full',action:'HDD upgraded 4TB',by:'Rajendra',cost:'3800',status:'Resolved',nextDate:'2026-02-15'},
+    {id:3,date:'2025-05-01',dept:'Office',item:'Accounts - Photocopier',issue:'Paper jam',action:'Roller cleaned',by:'Vendor',cost:'800',status:'Pending',nextDate:'2025-11-01'}
+  ],
+  amc: [
+    {id:1,item:'CCTV System (All NVRs + Cameras)',vendor:'TechVision Pvt Ltd',contact:'9300XXXXXX',startDate:'2025-04-01',endDate:'2026-03-31',amount:'45000',coverage:'Parts+Labour',visits:'Quarterly',remark:'4 visits/year'},
+    {id:2,item:'UPS All Online Units',vendor:'APC Authorized Service',contact:'9400XXXXXX',startDate:'2025-01-01',endDate:'2025-12-31',amount:'28000',coverage:'Labour only',visits:'Half-yearly',remark:'Battery extra'},
+    {id:3,item:'Smart Boards Primary Wing',vendor:'Promethean India',contact:'9500XXXXXX',startDate:'2024-08-01',endDate:'2025-07-31',amount:'35000',coverage:'Parts+Labour',visits:'On-call',remark:'Renewal due July'},
+    {id:4,item:'Computer Lab Sr All PCs',vendor:'Dell Authorized Service',contact:'9700XXXXXX',startDate:'2024-04-01',endDate:'2025-03-31',amount:'52000',coverage:'Parts+Labour',visits:'On-call',remark:'Renewal pending'}
+  ],
+  nids: {cctv:6,smart:3,labs:4,ups:4,equip:5,office:8,maint:4,amc:5}
+};
+
+var FLOORS = ['Ground Floor','1st Floor','2nd Floor','3rd Floor','Outdoor'];
+var WINGS  = ['Primary','Middle','Senior'];
+var NVRS   = ['NVR 1','NVR 2','NVR 3','NVR 4'];
+var UTYPE  = ['5 KVA','3 KVA','2 KVA','1 KVA','Other'];
+var DEPTS  = ['MD 1','MD 2','Principal','Admin','Accounts','Store','Hostel'];
+var DICONS = {'MD 1':'👔','MD 2':'👔','Principal':'🎓','Admin':'🗂️','Accounts':'💰','Store':'📦','Hostel':'🏠'};
+var MDEPTS = ['Labs','CCTV','Smart Class','UPS','Office','Equipment','Hostel','Other'];
+var ROLES  = ['Admin','Principal','IT Staff','View Only'];
+
+// ============================================================
+// STORAGE
+// ============================================================
+function saveDB(){try{localStorage.setItem('dps_db',JSON.stringify(DB))}catch(e){}}
+function loadDB(){try{var d=localStorage.getItem('dps_db');if(d)Object.assign(DB,JSON.parse(d))}catch(e){}}
+function getUsers(){try{var u=localStorage.getItem('dps_users');if(u)return JSON.parse(u)}catch(e){}return[{username:'admin',pwd:btoa('dps@2025'),role:'Admin'},{username:'principal',pwd:btoa('prin@2025'),role:'Principal'},{username:'itstaff',pwd:btoa('it@2025'),role:'IT Staff'}]}
+function saveUsers(u){try{localStorage.setItem('dps_users',JSON.stringify(u))}catch(e){}}
+function getCU(){try{var u=sessionStorage.getItem('dps_cu');if(u)return JSON.parse(u)}catch(e){}return null}
+function setCU(u){sessionStorage.setItem('dps_cu',JSON.stringify(u))}
+
+loadDB();
+
+// ============================================================
+// AUTH
+// ============================================================
+function isAdmin(){var u=getCU();return u&&u.role==='Admin'}
+function canEdit(){var u=getCU();return u&&(u.role==='Admin'||u.role==='IT Staff')}
+
+function doLogin(){
+  var uname = document.getElementById('LU').value.trim().toLowerCase();
+  var pass  = document.getElementById('LP').value;
+  var le    = document.getElementById('LE');
+  le.className = 'le';
+  if(!uname || !pass){
+    le.innerHTML = 'Username aur Password dono zaroori hain!';
+    le.className = 'le show';
+    return;
+  }
+  var users = getUsers();
+  var found = null;
+  for(var i=0;i<users.length;i++){
+    if(users[i].username.toLowerCase()===uname && users[i].pwd===btoa(pass)){
+      found = users[i]; break;
+    }
+  }
+  if(found){
+    setCU({username:found.username,role:found.role});
+    document.getElementById('LS').className = 'show'.replace('show','');
+    document.getElementById('LS').style.display = 'none';
+    document.getElementById('UB').textContent = found.role+' ('+found.username+') ▾';
+    document.getElementById('LP').value = '';
+    if(isAdmin()){
+      document.getElementById('t9').style.display = '';
+      document.getElementById('miUsers').style.display = '';
+    }
+    render();
+  } else {
+    le.innerHTML = 'Galat Username ya Password!<br><small>admin / dps@2025 try karo</small>';
+    le.className = 'le show';
+    document.getElementById('LP').value = '';
+    document.getElementById('LP').focus();
+  }
+}
+
+function doLogout(){
+  if(!confirm('Logout karna chahte ho?'))return;
+  sessionStorage.removeItem('dps_cu');
+  document.getElementById('UM').className = 'umenu';
+  document.getElementById('LU').value = '';
+  document.getElementById('LP').value = '';
+  document.getElementById('LE').className = 'le';
+  document.getElementById('LS').style.display = 'flex';
+  document.getElementById('t9').style.display = 'none';
+}
+
+function toggleUM(){
+  var m = document.getElementById('UM');
+  m.className = m.className.indexOf('open')>=0 ? 'umenu' : 'umenu open';
+}
+
+document.addEventListener('click',function(e){
+  var m=document.getElementById('UM');
+  var b=document.getElementById('UB');
+  if(m&&b&&!m.contains(e.target)&&!b.contains(e.target))m.className='umenu';
+});
+
+function openPwd(){document.getElementById('UM').className='umenu';document.getElementById('pwdModal').className='mbg open';}
+function closePwd(){document.getElementById('pwdModal').className='mbg';}
+
+function changePwd(){
+  var cu=getCU();
+  var o=document.getElementById('pwOld').value;
+  var n=document.getElementById('pwNew').value;
+  var c=document.getElementById('pwCon').value;
+  var err=document.getElementById('pwdErr');
+  var ok=document.getElementById('pwdOk');
+  err.style.display='none';ok.style.display='none';
+  if(!o||!n||!c){err.textContent='Sab fields bharo!';err.style.display='block';return;}
+  if(n.length<6){err.textContent='Naya password min 6 characters ka hona chahiye!';err.style.display='block';return;}
+  if(n!==c){err.textContent='Naya password aur confirm match nahi karte!';err.style.display='block';return;}
+  var users=getUsers();
+  var idx=-1;
+  for(var i=0;i<users.length;i++){if(users[i].username===cu.username&&users[i].pwd===btoa(o)){idx=i;break;}}
+  if(idx<0){err.textContent='Purana password galat hai!';err.style.display='block';return;}
+  users[idx].pwd=btoa(n);
+  saveUsers(users);
+  ok.textContent='Password successfully change ho gaya!';
+  ok.style.display='block';
+  document.getElementById('pwOld').value='';
+  document.getElementById('pwNew').value='';
+  document.getElementById('pwCon').value='';
+  setTimeout(function(){closePwd();},1800);
+}
+
+function gotoUsers(){
+  document.getElementById('UM').className='umenu';
+  go('users',document.getElementById('t9'));
+}
+
+// ============================================================
+// ROUTING
+// ============================================================
+var curTab = null;
+function go(tab, el){
+  DB.tab = tab;
+  if(curTab) curTab.className = 'tab';
+  if(el){ el.className = 'tab active'; curTab = el; }
+  render();
+}
+
+function render(){
+  var c = document.getElementById('CT');
+  if(!c)return;
+  if(DB.tab==='overview') c.innerHTML = vOverview();
+  else if(DB.tab==='cctv')    c.innerHTML = vCCTV();
+  else if(DB.tab==='smart')   c.innerHTML = vSmart();
+  else if(DB.tab==='labs')    c.innerHTML = vLabs();
+  else if(DB.tab==='ups')     c.innerHTML = vUPS();
+  else if(DB.tab==='equip')   c.innerHTML = vEquip();
+  else if(DB.tab==='office')  c.innerHTML = vOffice();
+  else if(DB.tab==='maint')   c.innerHTML = vMaint();
+  else if(DB.tab==='amc')     c.innerHTML = vAMC();
+  else if(DB.tab==='users')   c.innerHTML = vUsers();
+  else c.innerHTML = vOverview();
+}
+
+// ============================================================
+// HELPERS
+// ============================================================
+function daysleft(d){if(!d||d==='—')return null;return Math.ceil((new Date(d)-new Date())/86400000);}
+function stb(s){return '<span class="b '+(s==='Functional'?'bg':s==='Under Repair'?'ba':'br')+'">'+s+'</span>';}
+function ab(tp,id){
+  if(!canEdit())return '';
+  return '<span class="abtn no-print"><button class="btn btn-e btn-sm" onclick="editEntry(\''+tp+'\','+id+')">Edit</button> <button class="btn btn-d btn-sm" onclick="delEntry(\''+tp+'\','+id+')">Del</button></span>';
+}
+function fh(icon,lbl){return '<div class="fh">'+icon+' '+lbl+'</div>';}
+function ph(title){return '<div class="ph"><h2>Delhi Public School, Jabalpur</h2><p>'+title+' | '+new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'long',year:'numeric'})+'</p></div>';}
+function addbtn(tp,label){
+  if(!canEdit())return '';
+  return '<button class="btn btn-p no-print" onclick="addEntry(\''+tp+'\')">+ '+label+'</button>';
+}
+
+// ============================================================
+// VIEWS
+// ============================================================
+function vOverview(){
+  var pc=DB.labs.reduce(function(s,l){return s+(+l.pcs||0);},0);
+  var ex=DB.amc.filter(function(a){var d=daysleft(a.endDate);return d!==null&&d>=0&&d<=60;}).length;
+  var pe=DB.maint.filter(function(m){return m.status==='Pending';}).length;
+  return ph('Digital Infrastructure Register')+
+  '<div class="sg">'+
+  '<div class="sc"><div>📷</div><div class="sn">'+DB.cctv.length+'</div><div class="sl">CCTV Cameras</div></div>'+
+  '<div class="sc"><div>🖥️</div><div class="sn">'+DB.smart.length+'</div><div class="sl">Smart Class</div></div>'+
+  '<div class="sc"><div>💻</div><div class="sn">'+DB.labs.length+'</div><div class="sl">Labs</div></div>'+
+  '<div class="sc"><div>🖱️</div><div class="sn">'+pc+'</div><div class="sl">Total PCs</div></div>'+
+  '<div class="sc"><div>⚡</div><div class="sn">'+DB.ups.length+'</div><div class="sl">UPS Units</div></div>'+
+  '<div class="sc"><div>🖨️</div><div class="sn">'+DB.equip.length+'</div><div class="sl">Equipment</div></div>'+
+  '<div class="sc"><div>⚠️</div><div class="sn" style="color:'+(ex>0?'#92400e':'#166534')+'">'+ex+'</div><div class="sl">AMC Expiring</div></div>'+
+  '<div class="sc"><div>🔧</div><div class="sn" style="color:'+(pe>0?'#b91c1c':'#166534')+'">'+pe+'</div><div class="sl">Maint. Pending</div></div>'+
+  '</div>'+
+  '<div class="card"><div style="font-weight:600;font-size:13px;color:var(--navy);margin-bottom:10px">Register Index</div>'+
+  '<div class="tw"><table><thead><tr><th>Module</th><th>Description</th><th>Entries</th></tr></thead><tbody>'+
+  '<tr><td>CCTV Surveillance</td><td>Floor-wise camera, IP, NVR, Speaker</td><td>'+DB.cctv.length+'</td></tr>'+
+  '<tr><td>Smart Classroom</td><td>Wing-wise board, CAU, OS, UPS, Teacher</td><td>'+DB.smart.length+'</td></tr>'+
+  '<tr><td>Labs</td><td>Computer Lab Sr/Pr, ATL, Bio — specs, UPS</td><td>'+DB.labs.length+'</td></tr>'+
+  '<tr><td>UPS</td><td>All UPS — type, brand, serial, battery date</td><td>'+DB.ups.length+'</td></tr>'+
+  '<tr><td>Equipment</td><td>EPBAX, Printers, Photocopiers, Signage</td><td>'+DB.equip.length+'</td></tr>'+
+  '<tr><td>Office Departments</td><td>MD1, MD2, Principal, Admin, Accounts, Store, Hostel</td><td>'+DB.office.length+'</td></tr>'+
+  '<tr><td>Maintenance Log</td><td>Repair records + cost tracking</td><td>'+DB.maint.length+'</td></tr>'+
+  '<tr><td>AMC Register</td><td>Annual maintenance contracts</td><td>'+DB.amc.length+'</td></tr>'+
+  '</tbody></table></div>'+
+  '<div class="ib">NVR: GF→NVR1 | 1F→NVR2 | 2F/3F→NVR3 | Outdoor→NVR4 | APC 5KVA Main UPS</div>'+
+  '</div>';
+}
+
+function vCCTV(){
+  var f=window._cf||'All';
+  var map={};
+  DB.cctv.filter(function(c){return f==='All'||c.floor===f;}).forEach(function(c){if(!map[c.floor])map[c.floor]=[];map[c.floor].push(c);});
+  var out=ph('Surveillance Register')+'<div class="card"><div class="toolbar"><select onchange="window._cf=this.value;render()"><option value="All">All Floors</option>'+FLOORS.map(function(x){return '<option'+(x===(window._cf||'All')?' selected':'')+'>'+x+'</option>';}).join('')+'</select><div style="flex:1"></div>'+addbtn('cctv','Add Camera')+'</div>';
+  if(!Object.keys(map).length)return out+'<div class="empty">No cameras added.</div></div>';
+  Object.keys(map).forEach(function(fl){
+    out+=fh('📷',fl+' — '+map[fl].length+' camera'+(map[fl].length>1?'s':''));
+    out+='<div class="tw" style="margin-bottom:8px"><table><thead><tr><th>S.No</th><th>Room</th><th>Class</th><th>Sec</th><th>Brand</th><th>IP Address</th><th>NVR</th><th>Speaker</th><th>Location</th><th>Action</th></tr></thead><tbody>';
+    map[fl].forEach(function(c,i){
+      out+='<tr><td>'+(i+1)+'</td><td>'+c.room+'</td><td>'+c.cls+'</td><td>'+c.sec+'</td><td>'+c.brand+'</td><td style="font-family:monospace;font-size:11px">'+c.ip+'</td><td><span class="b bb">'+c.nvr+'</span></td><td><span class="b '+(c.speaker==='Yes'?'bg':'bx')+'">'+c.speaker+'</span></td><td>'+c.loc+'</td><td>'+ab('cctv',c.id)+'</td></tr>';
+    });
+    out+='</tbody></table></div>';
+  });
+  return out+'<div class="ib">Maintenance: NVR health | Converter | Cable | Camera cleaning</div></div>';
+}
+
+function vSmart(){
+  var w=window._sw||'All';
+  var map={};
+  DB.smart.filter(function(s){return w==='All'||s.wing===w;}).forEach(function(s){if(!map[s.wing])map[s.wing]=[];map[s.wing].push(s);});
+  var out=ph('Smart Classroom Register')+'<div class="card"><div class="toolbar"><select onchange="window._sw=this.value;render()"><option value="All">All Wings</option>'+WINGS.map(function(x){return '<option'+(x===(window._sw||'All')?' selected':'')+'>'+x+'</option>';}).join('')+'</select><div style="flex:1"></div>'+addbtn('smart','Add Classroom')+'</div>';
+  if(!Object.keys(map).length)return out+'<div class="empty">No classrooms added.</div></div>';
+  Object.keys(map).forEach(function(wn){
+    out+=fh('🏫',wn+' Wing — '+map[wn].length+' room'+(map[wn].length>1?'s':''));
+    out+='<div class="tw" style="margin-bottom:8px"><table><thead><tr><th>S.No</th><th>Room</th><th>Class</th><th>Sec</th><th>Board Brand</th><th>P/N</th><th>Type</th><th>CAU</th><th>OS</th><th>UPS No.</th><th>Pen</th><th>Teacher</th><th>Action</th></tr></thead><tbody>';
+    map[wn].forEach(function(s,i){
+      out+='<tr><td>'+(i+1)+'</td><td>'+s.room+'</td><td>'+s.cls+'</td><td>'+s.sec+'</td><td>'+s.bcomp+'</td><td style="font-size:11px">'+s.bpn+'</td><td>'+s.btype+'</td><td>'+s.cau+'</td><td><span class="b bb">'+s.os+'</span></td><td>'+s.upsno+'</td><td><span class="b '+(s.pen==='Yes'?'bg':'bx')+'">'+s.pen+'</span></td><td>'+s.teacher+'</td><td>'+ab('smart',s.id)+'</td></tr>';
+    });
+    out+='</tbody></table></div>';
+  });
+  return out+'</div>';
+}
+
+function vLabs(){
+  var rows=DB.labs.map(function(l,i){return '<tr><td>'+(i+1)+'</td><td><b>'+l.name+'</b></td><td>'+l.room+'</td><td style="text-align:center;font-weight:600">'+l.pcs+'</td><td>'+l.brand+'</td><td>'+l.proc+'</td><td>'+l.ram+'</td><td>'+l.stor+'</td><td><span class="b bb">'+l.os+'</span></td><td>'+l.ups+'</td><td>'+l.printer+'</td><td>'+stb(l.status)+'</td><td>'+ab('labs',l.id)+'</td></tr>';}).join('');
+  return ph('Labs Register')+'<div class="card"><div class="toolbar"><span style="font-size:12px;color:var(--muted)">'+DB.labs.length+' labs</span><div style="flex:1"></div>'+addbtn('labs','Add Lab')+'</div><div class="tw"><table><thead><tr><th>S.No</th><th>Lab Name</th><th>Room</th><th>PCs</th><th>Brand</th><th>Processor</th><th>RAM</th><th>Storage</th><th>OS</th><th>UPS</th><th>Printer</th><th>Status</th><th>Action</th></tr></thead><tbody>'+(rows||'<tr><td colspan="13" class="empty">No labs added.</td></tr>')+'</tbody></table></div></div>';
+}
+
+function vUPS(){
+  var rows=DB.ups.map(function(u,i){return '<tr><td>'+(i+1)+'</td><td>'+u.loc+'</td><td><span class="b bb">'+u.type+'</span></td><td><span class="b '+(u.mode==='Online'?'bg':'ba')+'">'+u.mode+'</span></td><td>'+u.brand+'</td><td style="font-size:11px">'+u.model+'</td><td style="font-family:monospace;font-size:11px">'+u.serial+'</td><td>'+u.pdate+'</td><td>'+u.bdate+'</td><td>'+u.area+'</td><td>'+ab('ups',u.id)+'</td></tr>';}).join('');
+  return ph('UPS Register')+'<div class="card"><div class="toolbar"><span style="font-size:12px;color:var(--muted)">'+DB.ups.length+' UPS units</span><div style="flex:1"></div>'+addbtn('ups','Add UPS')+'</div><div class="tw"><table><thead><tr><th>S.No</th><th>Location</th><th>Type</th><th>Mode</th><th>Brand</th><th>Model</th><th>Serial No.</th><th>Purchase Date</th><th>Battery Change</th><th>Placed Area</th><th>Action</th></tr></thead><tbody>'+(rows||'<tr><td colspan="11" class="empty">No UPS added.</td></tr>')+'</tbody></table></div><div class="ib">All UPS sticker: Placement Area | Purchase Date | Battery Change Date</div></div>';
+}
+
+function vEquip(){
+  var rows=DB.equip.map(function(e,i){return '<tr><td>'+(i+1)+'</td><td>'+e.type+'</td><td>'+e.brand+'</td><td>'+e.loc+'</td><td style="font-family:monospace;font-size:11px">'+e.serial+'</td><td>'+e.pdate+'</td><td><span class="b '+(e.amc==='Yes'?'bg':'bx')+'">'+e.amc+'</span></td><td>'+stb(e.status)+'</td><td>'+(e.remark||'—')+'</td><td>'+ab('equip',e.id)+'</td></tr>';}).join('');
+  return ph('Equipment Register')+'<div class="card"><div class="toolbar"><span style="font-size:12px;color:var(--muted)">'+DB.equip.length+' items</span><div style="flex:1"></div>'+addbtn('equip','Add Equipment')+'</div><div class="tw"><table><thead><tr><th>S.No</th><th>Type</th><th>Brand/Model</th><th>Location</th><th>Serial No.</th><th>Purchase Date</th><th>AMC</th><th>Status</th><th>Remark</th><th>Action</th></tr></thead><tbody>'+(rows||'<tr><td colspan="10" class="empty">No equipment added.</td></tr>')+'</tbody></table></div></div>';
+}
+
+function vOffice(){
+  var f=window._of||'All';
+  var out=ph('Office Departments')+'<div class="card"><div style="font-weight:600;font-size:13px;color:var(--navy);margin-bottom:10px">Office Departments</div><div class="toolbar"><select onchange="window._of=this.value;render()"><option value="All">All Departments</option>'+DEPTS.map(function(d){return '<option'+(d===(window._of||'All')?' selected':'')+'>'+d+'</option>';}).join('')+'</select><div style="flex:1"></div>'+addbtn('office','Add Item')+'</div>';
+  DEPTS.filter(function(d){return f==='All'||d===f;}).forEach(function(dept){
+    var items=DB.office.filter(function(o){return o.dept===dept;});
+    out+=fh(DICONS[dept]||'🏢',dept+' — '+items.length+' item'+(items.length!==1?'s':''));
+    out+='<div class="tw" style="margin-bottom:8px"><table><thead><tr><th>S.No</th><th>Room</th><th>Item</th><th>Brand</th><th>Model</th><th>Serial</th><th>OS</th><th>UPS</th><th>Printer</th><th>Internet</th><th>Phone</th><th>Status</th><th>Remark</th><th>Action</th></tr></thead><tbody>';
+    if(!items.length){ out+='<tr><td colspan="14" class="empty">No items.</td></tr>'; }
+    items.forEach(function(o,i){
+      out+='<tr><td>'+(i+1)+'</td><td>'+o.room+'</td><td>'+o.item+'</td><td>'+o.brand+'</td><td style="font-size:11px">'+o.model+'</td><td style="font-family:monospace;font-size:11px">'+o.serial+'</td><td><span class="b bb">'+o.os+'</span></td><td>'+o.ups+'</td><td>'+o.printer+'</td><td><span class="b '+(o.internet==='Yes'?'bg':'bx')+'">'+o.internet+'</span></td><td>'+o.phone+'</td><td>'+stb(o.status)+'</td><td>'+(o.remark||'—')+'</td><td>'+ab('office',o.id)+'</td></tr>';
+    });
+    out+='</tbody></table></div>';
+  });
+  return out+'</div>';
+}
+
+function vMaint(){
+  var f=window._mf||'All';
+  var list=DB.maint.filter(function(m){return f==='All'||m.dept===f;});
+  var total=list.reduce(function(s,m){return s+(+m.cost||0);},0);
+  var pend=list.filter(function(m){return m.status==='Pending';}).length;
+  var rows=list.map(function(m,i){return '<tr><td>'+(i+1)+'</td><td>'+m.date+'</td><td><span class="b bb">'+m.dept+'</span></td><td>'+m.item+'</td><td style="color:#b91c1c">'+m.issue+'</td><td style="color:#166534">'+m.action+'</td><td>'+m.by+'</td><td><span class="b '+(m.status==='Resolved'?'bg':m.status==='Pending'?'ba':'br')+'">'+m.status+'</span></td><td>'+(m.cost?'Rs.'+Number(m.cost).toLocaleString('en-IN'):'—')+'</td><td>'+(m.nextDate||'—')+'</td><td>'+ab('maint',m.id)+'</td></tr>';}).join('');
+  return ph('Maintenance Log')+'<div class="card">'+
+    '<div style="font-weight:600;font-size:13px;color:var(--navy);margin-bottom:10px">Maintenance Log</div>'+
+    '<div class="sg" style="grid-template-columns:repeat(3,1fr);margin-bottom:12px">'+
+    '<div class="sc" style="padding:8px"><div class="sn" style="font-size:18px">'+list.length+'</div><div class="sl">Total</div></div>'+
+    '<div class="sc" style="padding:8px"><div class="sn" style="font-size:18px;color:'+(pend>0?'#b91c1c':'#166534')+'">'+pend+'</div><div class="sl">Pending</div></div>'+
+    '<div class="sc" style="padding:8px"><div class="sn" style="font-size:16px">Rs.'+total.toLocaleString('en-IN')+'</div><div class="sl">Total Cost</div></div>'+
+    '</div>'+
+    '<div class="toolbar"><select onchange="window._mf=this.value;render()"><option value="All">All Departments</option>'+MDEPTS.map(function(d){return '<option'+(d===(window._mf||'All')?' selected':'')+'>'+d+'</option>';}).join('')+'</select><div style="flex:1"></div>'+addbtn('maint','Add Entry')+'</div>'+
+    '<div class="tw"><table><thead><tr><th>S.No</th><th>Date</th><th>Dept.</th><th>Item</th><th>Issue</th><th>Action Taken</th><th>Done By</th><th>Status</th><th>Cost</th><th>Next Service</th><th>Action</th></tr></thead><tbody>'+(rows||'<tr><td colspan="11" class="empty">No entries.</td></tr>')+'</tbody></table></div>'+
+    '<div class="ib">Har repair ka record yahan rakho — cost tracking ke liye</div></div>';
+}
+
+function vAMC(){
+  var total=DB.amc.reduce(function(s,a){return s+(+a.amount||0);},0);
+  var exp=DB.amc.filter(function(a){var d=daysleft(a.endDate);return d!==null&&d>=0&&d<=60;}).length;
+  var expd=DB.amc.filter(function(a){var d=daysleft(a.endDate);return d!==null&&d<0;}).length;
+  var rows=DB.amc.map(function(a,i){
+    var d=daysleft(a.endDate);
+    var dl=d!==null?' <small style="color:'+(d<0?'#b91c1c':d<=60?'#92400e':'#166534')+'">('+( d<0?Math.abs(d)+'d ago':d+'d left')+')</small>':'';
+    var sb=d===null?'<span class="b bx">N/A</span>':d<0?'<span class="b br">Expired</span>':d<=60?'<span class="b ba">Expiring Soon</span>':'<span class="b bg">Active</span>';
+    return '<tr><td>'+(i+1)+'</td><td><b>'+a.item+'</b></td><td>'+a.vendor+'</td><td style="font-family:monospace;font-size:11px">'+a.contact+'</td><td>'+a.startDate+'</td><td>'+a.endDate+dl+'</td><td>Rs.'+Number(a.amount).toLocaleString('en-IN')+'</td><td>'+a.coverage+'</td><td>'+a.visits+'</td><td>'+sb+'</td><td>'+(a.remark||'—')+'</td><td>'+ab('amc',a.id)+'</td></tr>';
+  }).join('');
+  return ph('AMC Register')+'<div class="card">'+
+    '<div style="font-weight:600;font-size:13px;color:var(--navy);margin-bottom:10px">AMC Register — Annual Maintenance Contracts</div>'+
+    '<div class="sg" style="grid-template-columns:repeat(5,1fr);margin-bottom:14px">'+
+    '<div class="sc" style="padding:8px"><div class="sn" style="font-size:18px">'+DB.amc.length+'</div><div class="sl">Total</div></div>'+
+    '<div class="sc" style="padding:8px"><div class="sn" style="font-size:18px;color:#166534">'+(DB.amc.length-exp-expd)+'</div><div class="sl">Active</div></div>'+
+    '<div class="sc" style="padding:8px"><div class="sn" style="font-size:18px;color:#92400e">'+exp+'</div><div class="sl">Expiring</div></div>'+
+    '<div class="sc" style="padding:8px"><div class="sn" style="font-size:18px;color:#b91c1c">'+expd+'</div><div class="sl">Expired</div></div>'+
+    '<div class="sc" style="padding:8px"><div class="sn" style="font-size:14px">Rs.'+total.toLocaleString('en-IN')+'</div><div class="sl">Total Value</div></div>'+
+    '</div>'+
+    '<div class="toolbar"><div style="flex:1"></div>'+addbtn('amc','Add AMC')+'</div>'+
+    '<div class="tw"><table><thead><tr><th>S.No</th><th>Item</th><th>Vendor</th><th>Contact</th><th>Start</th><th>End Date</th><th>Amount</th><th>Coverage</th><th>Visits</th><th>Status</th><th>Remark</th><th>Action</th></tr></thead><tbody>'+(rows||'<tr><td colspan="12" class="empty">No AMC added.</td></tr>')+'</tbody></table></div>'+
+    '<div class="ib">Expiring Soon = 60 din se kam bacha — Vendor se renewal ke liye contact karo</div></div>';
+}
+
+function vUsers(){
+  if(!isAdmin())return '<div class="card"><div class="empty">Sirf Admin yahan aa sakta hai.</div></div>';
+  var users=getUsers();
+  var rows=users.map(function(u,i){
+    var rc=u.role==='Admin'?'br':u.role==='IT Staff'?'bb':u.role==='Principal'?'bg':'bx';
+    var del=u.username==='admin'?'<span style="font-size:11px;color:var(--muted)">Protected</span>':'<button class="btn btn-d btn-sm" onclick="delUser('+i+')">Del</button>';
+    return '<tr><td>'+(i+1)+'</td><td><b>'+u.username+'</b></td><td><span class="b '+rc+'">'+u.role+'</span></td><td style="color:var(--muted)">••••••••</td><td class="no-print"><button class="btn btn-e btn-sm" onclick="editUser('+i+')">Edit</button> '+del+'</td></tr>';
+  }).join('');
+  return '<div class="card">'+
+    '<div style="font-weight:600;font-size:13px;color:var(--navy);margin-bottom:12px">User Management</div>'+
+    '<div class="toolbar"><span style="font-size:12px;color:var(--muted)">'+users.length+' users</span><div style="flex:1"></div><button class="btn btn-p no-print" onclick="addUser()">+ Add User</button></div>'+
+    '<div class="tw"><table><thead><tr><th>S.No</th><th>Username</th><th>Role</th><th>Password</th><th class="no-print">Action</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
+    '<div class="ib">Admin=Full Access | IT Staff=Add/Edit/Delete | Principal=View Only | View Only=View Only</div>'+
+    '</div>';
+}
+
+// ============================================================
+// FORM DEFINITIONS
+// ============================================================
+var FORMS = {
+  cctv: {title:'CCTV Camera', f:[
+    {l:'Floor',k:'floor',s:FLOORS},{l:'Room No.',k:'room',ph:'101'},
+    {l:'Class',k:'cls',ph:'Class 1'},{l:'Section',k:'sec',ph:'A'},
+    {l:'Camera Brand',k:'brand',ph:'Hikvision / Dahua'},{l:'IP Address',k:'ip',ph:'192.168.1.x'},
+    {l:'Mapped NVR',k:'nvr',s:NVRS},{l:'Speaker',k:'speaker',s:['Yes','No']},
+    {l:'Location',k:'loc',ph:'Classroom / Corridor / Gate',full:1}
+  ]},
+  smart: {title:'Smart Classroom', f:[
+    {l:'Wing',k:'wing',s:WINGS},{l:'Room No.',k:'room',ph:'101'},
+    {l:'Class',k:'cls',ph:'Nursery / Class 6'},{l:'Section',k:'sec',ph:'A'},
+    {l:'Board Company',k:'bcomp',ph:'Promethean / Samsung'},{l:'Board P/N',k:'bpn',ph:'Model No.'},
+    {l:'Board Type',k:'btype',ph:'Smart Board / Green White'},{l:'Board Size',k:'bsize',ph:'75in / 8x4 ft'},
+    {l:'CAU / System',k:'cau',ph:'Intel NUC / Dell'},{l:'OS',k:'os',s:['Windows 11','Windows 10','Linux']},
+    {l:'UPS No.',k:'upsno',ph:'UPS-P01'},{l:'Magnetic Pen',k:'pen',s:['Yes','No']},
+    {l:'Handed To',k:'teacher',ph:'Mrs. Sharma'},{l:'Date Handed',k:'hdate',t:'date'}
+  ]},
+  labs: {title:'Lab', f:[
+    {l:'Lab Name',k:'name',ph:'Computer Lab Sr / ATL Lab',full:1},
+    {l:'Room No.',k:'room',ph:'L-01'},{l:'Total PCs',k:'pcs',t:'number',ph:'40'},
+    {l:'PC Brand',k:'brand',ph:'Dell / HP'},{l:'Processor',k:'proc',ph:'i5 10th Gen'},
+    {l:'RAM',k:'ram',ph:'8 GB'},{l:'Storage',k:'stor',ph:'256 GB SSD'},
+    {l:'OS',k:'os',ph:'Windows 11'},{l:'UPS',k:'ups',ph:'5 KVA'},
+    {l:'Printer',k:'printer',ph:'HP LaserJet / None'},{l:'Status',k:'status',s:['Functional','Under Repair','Not Working']}
+  ]},
+  ups: {title:'UPS', f:[
+    {l:'Location',k:'loc',ph:'Computer Lab Sr',full:1},
+    {l:'Type',k:'type',s:UTYPE},{l:'Mode',k:'mode',s:['Online','Normal']},
+    {l:'Brand',k:'brand',ph:'APC / Luminous'},{l:'Model',k:'model',ph:'Model No.'},
+    {l:'Serial No.',k:'serial',ph:'Serial No.'},{l:'Purchase Date',k:'pdate',t:'date'},
+    {l:'Battery Change Date',k:'bdate',t:'date'},{l:'Placed Area',k:'area',ph:'GF - Server Room'}
+  ]},
+  equip: {title:'Equipment', f:[
+    {l:'Type',k:'type',ph:'EPBAX / Printer / Photocopier'},{l:'Brand / Model',k:'brand',ph:'Panasonic KX-NS700'},
+    {l:'Location',k:'loc',ph:'Server Room / Office'},{l:'Serial No.',k:'serial',ph:'Serial No.'},
+    {l:'Purchase Date',k:'pdate',t:'date'},{l:'AMC',k:'amc',s:['Yes','No']},
+    {l:'Status',k:'status',s:['Functional','Under Repair','Not Working']},{l:'Remarks',k:'remark',ph:'Notes...'}
+  ]},
+  office: {title:'Office Item', f:[
+    {l:'Department',k:'dept',s:DEPTS},{l:'Room No.',k:'room',ph:'OF-MD1'},
+    {l:'Item Type',k:'item',ph:'Desktop PC / Laptop'},{l:'Brand',k:'brand',ph:'Dell / HP'},
+    {l:'Model',k:'model',ph:'Optiplex 3090'},{l:'Serial No.',k:'serial',ph:'Serial No.'},
+    {l:'OS',k:'os',s:['Windows 11','Windows 10','Linux','macOS','N/A']},{l:'UPS',k:'ups',ph:'1 KVA'},
+    {l:'Printer',k:'printer',ph:'HP LaserJet / None'},{l:'Internet',k:'internet',s:['Yes','No']},
+    {l:'Phone Extension',k:'phone',ph:'Ext 101'},{l:'Status',k:'status',s:['Functional','Under Repair','Not Working']},
+    {l:'Remark',k:'remark',ph:'Notes...',full:1}
+  ]},
+  maint: {title:'Maintenance Entry', f:[
+    {l:'Date',k:'date',t:'date'},{l:'Department',k:'dept',s:MDEPTS},
+    {l:'Item / Location',k:'item',ph:'Computer Lab Sr - PC 5',full:1},
+    {l:'Issue / Problem',k:'issue',ph:'Screen not working',full:1},
+    {l:'Action Taken',k:'action',ph:'Monitor replaced',full:1},
+    {l:'Done By',k:'by',ph:'Rajendra / Vendor name'},{l:'Cost (Rs.)',k:'cost',t:'number',ph:'0'},
+    {l:'Status',k:'status',s:['Resolved','Pending','Under Observation']},{l:'Next Service Date',k:'nextDate',t:'date'}
+  ]},
+  amc: {title:'AMC Contract', f:[
+    {l:'Item / Equipment',k:'item',ph:'CCTV System / Smart Boards',full:1},
+    {l:'Vendor Name',k:'vendor',ph:'Vendor company name'},{l:'Contact No.',k:'contact',ph:'9300XXXXXX'},
+    {l:'AMC Start Date',k:'startDate',t:'date'},{l:'AMC End Date',k:'endDate',t:'date'},
+    {l:'Amount (Rs.)',k:'amount',t:'number',ph:'45000'},{l:'Coverage',k:'coverage',s:['Parts+Labour','Labour only','Parts only','Comprehensive']},
+    {l:'Visit Frequency',k:'visits',s:['On-call','Monthly','Bi-monthly','Quarterly','Half-yearly','Yearly']},{l:'Remark',k:'remark',ph:'Battery extra / Toner extra'}
+  ]}
+};
+
+// ============================================================
+// MODAL OPEN / SAVE / DELETE
+// ============================================================
+function buildForm(cfg, rec){
+  var h='<div class="fg">';
+  cfg.f.forEach(function(f){
+    var v=rec?(rec[f.k]||''):'';
+    var cls='ff'+(f.full?' full':'');
+    var inp;
+    if(f.s){
+      inp='<select id="fi_'+f.k+'">';
+      f.s.forEach(function(o){inp+='<option'+(o===v?' selected':'')+'>'+o+'</option>';});
+      inp+='</select>';
+    } else {
+      inp='<input id="fi_'+f.k+'" type="'+(f.t||'text')+'" placeholder="'+(f.ph||'')+'" value="'+v+'">';
+    }
+    h+='<div class="'+cls+'"><label>'+f.l+'</label>'+inp+'</div>';
+  });
+  h+='</div>';
+  return h;
+}
+
+function gv(k){var e=document.getElementById('fi_'+k);return e?e.value:'';}
+
+var _editType=null, _editId=null;
+
+function addEntry(type){
+  var cfg=FORMS[type]; if(!cfg)return;
+  _editType=type; _editId=null;
+  document.getElementById('MI').innerHTML='<h3>Add '+cfg.title+'</h3>'+buildForm(cfg,null)+'<div class="mf"><button class="btn" onclick="closeMod()">Cancel</button><button class="btn btn-p" onclick="saveEntry()">Save</button></div>';
+  document.getElementById('MB').className='mbg open';
+}
+
+function editEntry(type,id){
+  var cfg=FORMS[type]; if(!cfg)return;
+  var rec=DB[type].find(function(x){return x.id===id;});
+  if(!rec)return;
+  _editType=type; _editId=id;
+  document.getElementById('MI').innerHTML='<h3>Edit '+cfg.title+'</h3>'+buildForm(cfg,rec)+'<div class="mf"><button class="btn" onclick="closeMod()">Cancel</button><button class="btn btn-p" onclick="saveEntry()">Save</button></div>';
+  document.getElementById('MB').className='mbg open';
+}
+
+function saveEntry(){
+  var cfg=FORMS[_editType]; if(!cfg)return;
+  var obj={};
+  cfg.f.forEach(function(f){obj[f.k]=gv(f.k);});
+  if(_editId!==null){
+    var idx=DB[_editType].findIndex(function(x){return x.id===_editId;});
+    if(idx>=0){obj.id=_editId; DB[_editType][idx]=obj;}
+  } else {
+    obj.id=DB.nids[_editType]++;
+    DB[_editType].push(obj);
+  }
+  saveDB(); closeMod(); render();
+}
+
+function delEntry(type,id){
+  if(!confirm('Delete karna chahte ho?'))return;
+  DB[type]=DB[type].filter(function(x){return x.id!==id;});
+  saveDB(); render();
+}
+
+function closeMod(){document.getElementById('MB').className='mbg';}
+
+// ============================================================
+// USER MANAGEMENT
+// ============================================================
+var _uidx=null;
+
+function addUser(){
+  _uidx=null;
+  document.getElementById('MI').innerHTML='<h3>Add New User</h3><div class="fg">'+
+    '<div class="ff full"><label>Username</label><input id="fi_un" type="text" placeholder="username (no spaces)"></div>'+
+    '<div class="ff full"><label>Role</label><select id="fi_rl">'+ROLES.map(function(r){return '<option>'+r+'</option>';}).join('')+'</select></div>'+
+    '<div class="ff full"><label>Password</label><input id="fi_pw" type="password" placeholder="Min 6 characters"></div>'+
+    '<div class="ff full"><label>Confirm Password</label><input id="fi_pw2" type="password" placeholder="Dobara daalo"></div>'+
+    '</div><div id="uerr" style="display:none;background:#fef2f2;color:#b91c1c;border-radius:7px;padding:8px 12px;font-size:12px;margin-top:10px;border:1px solid #fca5a5"></div>'+
+    '<div class="mf"><button class="btn" onclick="closeMod()">Cancel</button><button class="btn btn-p" onclick="saveUser()">Save</button></div>';
+  document.getElementById('MB').className='mbg open';
+}
+
+function editUser(idx){
+  var users=getUsers(); var u=users[idx];
+  _uidx=idx;
+  document.getElementById('MI').innerHTML='<h3>Edit User</h3><div class="fg">'+
+    '<div class="ff full"><label>Username</label><input id="fi_un" type="text" value="'+u.username+'"'+(u.username==='admin'?' readonly style="background:#f4f7fb"':'')+' ></div>'+
+    '<div class="ff full"><label>Role</label><select id="fi_rl">'+ROLES.map(function(r){return '<option'+(u.role===r?' selected':'')+'>'+r+'</option>';}).join('')+'</select></div>'+
+    '<div class="ff full"><label>New Password (khali = same rahega)</label><input id="fi_pw" type="password" placeholder="Naya password daalo"></div>'+
+    '</div><div id="uerr" style="display:none;background:#fef2f2;color:#b91c1c;border-radius:7px;padding:8px 12px;font-size:12px;margin-top:10px;border:1px solid #fca5a5"></div>'+
+    '<div class="mf"><button class="btn" onclick="closeMod()">Cancel</button><button class="btn btn-p" onclick="saveUser()">Save</button></div>';
+  document.getElementById('MB').className='mbg open';
+}
+
+function saveUser(){
+  var uname=(document.getElementById('fi_un').value||'').trim().toLowerCase();
+  var role=document.getElementById('fi_rl').value;
+  var pw=document.getElementById('fi_pw').value;
+  var err=document.getElementById('uerr');
+  err.style.display='none';
+  if(!uname){err.textContent='Username zaroori hai!';err.style.display='block';return;}
+  if(/\s/.test(uname)){err.textContent='Username mein space nahi hona chahiye!';err.style.display='block';return;}
+  var users=getUsers();
+  if(_uidx===null){
+    var pw2=document.getElementById('fi_pw2').value;
+    if(!pw){err.textContent='Password zaroori hai!';err.style.display='block';return;}
+    if(pw.length<6){err.textContent='Password min 6 characters ka hona chahiye!';err.style.display='block';return;}
+    if(pw!==pw2){err.textContent='Password aur Confirm match nahi karte!';err.style.display='block';return;}
+    if(users.find(function(u){return u.username===uname;})){err.textContent='Ye username pehle se exist karta hai!';err.style.display='block';return;}
+    users.push({username:uname,pwd:btoa(pw),role:role});
+  } else {
+    if(pw&&pw.length<6){err.textContent='Naya password min 6 characters ka hona chahiye!';err.style.display='block';return;}
+    users[_uidx].username=uname;
+    users[_uidx].role=role;
+    if(pw)users[_uidx].pwd=btoa(pw);
+  }
+  saveUsers(users); closeMod(); render();
+}
+
+function delUser(idx){
+  var users=getUsers();
+  if(users[idx].username==='admin'){alert('Admin delete nahi ho sakta!');return;}
+  if(!confirm('"'+users[idx].username+'" delete karna chahte ho?'))return;
+  users.splice(idx,1); saveUsers(users); render();
+}
+
+// ============================================================
+// INIT
+// ============================================================
+document.getElementById('LB').addEventListener('click', doLogin);
+document.getElementById('LP').addEventListener('keydown', function(e){if(e.key==='Enter')doLogin();});
+document.getElementById('LU').addEventListener('keydown', function(e){if(e.key==='Enter')doLogin();});
+document.getElementById('UB').addEventListener('click', toggleUM);
+
+var cu = getCU();
+if(cu){
+  document.getElementById('LS').style.display='none';
+  document.getElementById('UB').textContent=cu.role+' ('+cu.username+') ▾';
+  if(cu.role==='Admin'){
+    document.getElementById('t9').style.display='';
+    document.getElementById('miUsers').style.display='';
+  }
+  render();
+} else {
+  document.getElementById('LS').style.display='flex';
+}
+
+// PWA
+var _dp=null;
+var isSecure=location.protocol==='https:'||location.hostname==='localhost';
+if('serviceWorker' in navigator && isSecure){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('./service-worker.js').catch(function(){});
+  });
+  window.addEventListener('beforeinstallprompt',function(e){
+    e.preventDefault(); _dp=e;
+    setTimeout(function(){var b=document.getElementById('PB');if(b)b.style.display='block';},3000);
+  });
+}
+function installPWA(){if(_dp){_dp.prompt();_dp.userChoice.then(function(){var b=document.getElementById('PB');if(b)b.style.display='none';_dp=null;});}else{alert('GitHub Pages pe open karo phir install karo.');}}
+</script>
+
+<div id="PB" style="display:none;position:fixed;bottom:16px;right:16px;background:#0d2e5c;color:#fff;border-radius:12px;padding:14px 16px;box-shadow:0 4px 20px rgba(0,0,0,.3);z-index:400;max-width:280px;font-family:'Segoe UI',Arial,sans-serif">
+  <div style="font-size:13px;font-weight:600;margin-bottom:6px">App Install Karo!</div>
+  <div style="font-size:11px;opacity:.85;margin-bottom:10px">Desktop pe install karo — internet ke bina bhi chalega</div>
+  <div style="display:flex;gap:8px">
+    <button onclick="installPWA()" style="flex:1;background:#e8a020;color:#fff;border:none;border-radius:7px;padding:7px;font-size:12px;font-weight:600;cursor:pointer">Install Karo</button>
+    <button onclick="document.getElementById('PB').style.display='none'" style="background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:7px;padding:7px 10px;font-size:12px;cursor:pointer">X</button>
+  </div>
+</div>
+</body>
+</html>
